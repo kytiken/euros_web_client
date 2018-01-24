@@ -14,7 +14,9 @@ class Desk extends React.Component {
   componentDidMount() {
     this.timer = this.props.startClock();
 
+    /* eslint-disable */
     this.props.channel.on('crawl', msg => {
+    /* eslint-disable */
       this.props.addDocument(msg.url)
     });
   }
@@ -26,12 +28,15 @@ class Desk extends React.Component {
   render() {
     return (
       <div>
+        <input ref="urlInput" type="text" />
         <button onClick={() => {
           this.props.cleanDocuments();
-          this.props.channel.push("crawl", { url: 'http://aniram-czech.hatenablog.com/' }, 60000)
+          /* eslint-disable */
+          this.props.channel.push("crawl", { url: this.refs.urlInput.value }, 60000)
             .receive('ok', (msg) => console.log('created message', msg) )
             .receive('error', (reasons) => console.log('create failed', reasons) )
             .receive('timeout', () => console.log('Networking issue...') )
+          /* eslint-disable */
         }}>crawl</button>
         <button onClick={this.props.cleanDocuments}>clean</button>
         <Crawl url="http://google.com" documents={this.props.documents} linkTo="/" />
@@ -44,6 +49,7 @@ Desk.propTypes = {
   startClock: PropTypes.func.isRequired,
   addDocument: PropTypes.func.isRequired,
   documents: PropTypes.arrayOf(PropTypes.string).isRequired,
+  cleanDocuments: PropTypes.func.isRequired,
 };
 
 export default Desk;

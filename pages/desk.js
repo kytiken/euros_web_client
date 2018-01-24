@@ -8,8 +8,8 @@ import { initStore, startClock, addCount, addDocument, cleanDocuments } from '..
 const mapStateToProps = state =>
   ({ documents: state.documents });
 
-const mapDispatchToProps = dispatch => {
-  let channel = {}
+const mapDispatchToProps = (dispatch) => {
+  let channel = {};
   if (typeof window !== 'undefined') {
     const socket = new Socket('ws://localhost:32771/socket', { params: { userToken: '123' } });
     socket.connect();
