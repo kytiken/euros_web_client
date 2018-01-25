@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import withRedux from 'next-redux-wrapper';
-import { initStore, startClock, addCount, serverRenderClock } from '../store';
+import { initStore } from '../store';
+import { startClock, addCount, serverRenderClock } from '../actions';
 import Page from '../components/Page';
 
 class Counter extends React.Component {
