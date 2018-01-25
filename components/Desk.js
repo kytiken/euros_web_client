@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addCount, serverRenderClock } from '../store';
+import { addCount, serverRenderClock } from '../actions';
 import Crawl from '../components/Crawl';
 
 class Desk extends React.Component {
@@ -39,6 +39,10 @@ class Desk extends React.Component {
           /* eslint-disable */
         }}>crawl</button>
         <button onClick={this.props.cleanDocuments}>clean</button>
+      <button onClick={() => {
+        fetch('http://localhost:32771')
+        .then(response => response)
+      }}>sample</button>
         <Crawl url="http://google.com" documents={this.props.documents} linkTo="/" />
       </div>
     );
