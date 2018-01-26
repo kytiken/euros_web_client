@@ -7,7 +7,6 @@ import AddCount from './AddCount';
 
 const Page = ({
   title,
-  linkTo,
   lastUpdate,
   light,
 }) =>
@@ -17,7 +16,7 @@ const Page = ({
       <Clock lastUpdate={lastUpdate} light={light} />
       <AddCount />
       <nav>
-        <Link href={linkTo}>
+        <Link href="/">
           <span>Navigate</span>
         </Link>
       </nav>
@@ -27,7 +26,6 @@ const Page = ({
 
 Page.propTypes = {
   title: PropTypes.string.isRequired,
-  linkTo: PropTypes.string.isRequired,
   lastUpdate: PropTypes.number.isRequired,
   light: PropTypes.bool.isRequired,
 };
