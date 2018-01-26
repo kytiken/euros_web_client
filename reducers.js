@@ -4,7 +4,8 @@ export const exampleInitialState = {
   lastUpdate: 0,
   light: false,
   count: 0,
-  documents: [{ url: 'http://google.com' }],
+  documents: [],
+  crawls: [],
 };
 
 // REDUCERS
@@ -27,6 +28,10 @@ export const reducer = (state = exampleInitialState, action) => {
     case actionTypes.CLEAN_DOCUMENTS:
       return Object.assign({}, state, {
         documents: [],
+      });
+    case actionTypes.ADD_CRAWL:
+      return Object.assign({}, state, {
+        crawls: state.crawls.concat(action.crawl),
       });
     default: return state;
   }

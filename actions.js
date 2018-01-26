@@ -5,6 +5,7 @@ export const actionTypes = {
   START_CRAWL: 'START_CRAWL',
   ADD_DOCUMENT: 'ADD_DOCUMENT',
   CLEAN_DOCUMENTS: 'CLEAN_DOCUMENTS',
+  ADD_CRAWL: 'ADD_CRAWL',
 };
 
 export const serverRenderClock = isServer => dispatch =>
@@ -24,3 +25,6 @@ export const addDocument = url => dispatch =>
 
 export const cleanDocuments = () => dispatch =>
   dispatch({ type: actionTypes.CLEAN_DOCUMENTS });
+
+export const addCrawl = crawl => dispatch =>
+  dispatch({ type: actionTypes.ADD_CRAWL, crawl });
