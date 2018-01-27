@@ -4,31 +4,26 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import withRedux from 'next-redux-wrapper';
 import initStore from '../store';
-import { addCrawl } from '../actions';
 import Crawl from '../components/Crawl';
+import CrawlForm from '../components/CrawlForm';
+import { addCrawl } from '../actions';
+import config from '../config';
 
 class Counter extends React.Component {
   static getInitialProps({ isServer }) {
     return { isServer };
   }
 
+  componentDidMount() {
+    fetch(config.crawl_url)
+      .then(response => response.json())
+      .then(response => response.data.forEach(crawl => this.props.addCrawl(crawl)));
+  }
+
   render() {
     return (
       <div>
-        <input ref="urlInput" type="text" />
-        <button onClick={() => {
-          const crawl = {
-            url: 'http://google.com',
-            timeout: '60000',
-            recv_timeout: '60000',
-          };
-          this.props.addCrawl(crawl);
-        }}>addCrawl</button>
-        <button onClick={() => {
-          fetch('http://localhost:32771/crawls')
-          .then(response => response.json())
-          .then(response => response.data.forEach(crawl => this.props.addCrawl(crawl)));
-        }}>get index</button>
+        <CrawlForm addCrawl={this.props.addCrawl} />
         <ol>
           { this.props.crawls.map(crawl => <Crawl key={crawl.id} crawl={crawl} />) }
         </ol>
@@ -41,7 +36,6 @@ class Counter extends React.Component {
 }
 
 Counter.propTypes = {
-  addCrawl: PropTypes.func.isRequired,
   crawls: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
