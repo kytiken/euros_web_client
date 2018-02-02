@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { connect } from 'react-redux';
 
 const Crawl = ({
@@ -7,7 +8,9 @@ const Crawl = ({
 }) =>
   (
     <li>
-      { crawl.url }
+      <Link href={{ pathname: '/desk', query: { crawlId: crawl.id } }}>
+        { crawl.url }
+      </Link>
     </li>
   );
 
