@@ -19,7 +19,7 @@ class CrawlForm extends React.Component {
         <div>
           <label htmlFor="urlInput">
             url:
-            <input ref={(input) => { this.urlInput = input; }} id="urlInput" type="text" value="http://euros-test.blogspot.jp/" />
+            <input ref={(input) => { this.urlInput = input; }} id="urlInput" type="text" />
           </label>
         </div>
         <div>
@@ -31,19 +31,19 @@ class CrawlForm extends React.Component {
         <div>
           <label htmlFor="timeoutInput">
             timeout:
-            <input ref={(input) => { this.timeoutInput = input; }} id="timeoutInput" type="text" value="60000" />
+            <input ref={(input) => { this.timeoutInput = input; }} id="timeoutInput" type="text" />
           </label>
         </div>
         <div>
           <label htmlFor="recvTimeoutInput">
             recv_timeout:
-            <input ref={(input) => { this.recvTimeoutInput = input; }} id="recvTimeoutInput" type="text" value="60000" />
+            <input ref={(input) => { this.recvTimeoutInput = input; }} id="recvTimeoutInput" type="text" />
           </label>
         </div>
         <div>
           <label htmlFor="patternInput">
             pattern:
-            <input ref={(input) => { this.patternInput = input; }} id="patternInput" type="text" value=".*" />
+            <input ref={(input) => { this.patternInput = input; }} id="patternInput" type="text"  />
           </label>
         </div>
         <div>
