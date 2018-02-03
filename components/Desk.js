@@ -11,14 +11,14 @@ class Desk extends React.Component {
 
   componentDidMount() {
     /* eslint-disable */
-    this.props.channel.on('crawl', msg => {
+    this.props.channel.on('select', msg => {
     /* eslint-disable */
-      this.props.addDocument(msg.url)
+      this.props.addDocument(msg)
     });
     console.log(this.props.url.query.crawlId);
     fetch(config.crawl_url + '/' + this.props.url.query.crawlId.toString() + '/documents')
       .then(response => response.json())
-      .then(response => response.data.forEach(doc => this.props.addDocument(doc.url)));
+      .then(response => response.data.forEach(doc => this.props.addDocument(doc)));
   }
 
   componentWillUnmount() {
@@ -28,25 +28,25 @@ class Desk extends React.Component {
   render() {
     return (
       <div>
-        <input ref="urlInput" type="text" />
+        <input ref="queryInput" type="text" />
         <button onClick={() => {
           this.props.cleanDocuments();
           /* eslint-disable */
           this.props.channel
-            .push("crawl", { url: this.refs.urlInput.value }, 60000)
+            .push("select", { crawl_id: this.props.url.query.crawlId, query: this.refs.queryInput.value }, 60000)
             .receive('ok', (msg) => console.log('created message', msg) )
             .receive('error', (reasons) => console.log('create failed', reasons) )
             .receive('timeout', () => console.log('Networking issue...') )
           /* eslint-disable */
-        }}>crawl</button>
+        }}>select</button>
         <button onClick={this.props.cleanDocuments}>clean</button>
-
-        <ol>
-          { this.props.documents.map(doc => <Document url={doc.url} />) }
-        </ol>
         <Link href="/">
           <span>GoToTop</span>
         </Link>
+        <ol>
+          { this.props.documents.map(doc => <Document key={doc.id} doc={doc} />) }
+        </ol>
+
       </div>
     );
   }
@@ -54,7 +54,7 @@ class Desk extends React.Component {
 
 Desk.propTypes = {
   addDocument: PropTypes.func.isRequired,
-  documents: PropTypes.arrayOf(PropTypes.string).isRequired,
+  documents: PropTypes.arrayOf(PropTypes.object).isRequired,
   cleanDocuments: PropTypes.func.isRequired,
 };
 
