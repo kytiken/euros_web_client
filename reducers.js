@@ -11,16 +11,6 @@ export const exampleInitialState = {
 // REDUCERS
 export const reducer = (state = exampleInitialState, action) => {
   switch (action.type) {
-    case actionTypes.TICK:
-      return Object.assign({}, state, { lastUpdate: action.ts, light: !!action.light });
-    case actionTypes.ADD:
-      return Object.assign({}, state, {
-        count: state.count + 1,
-      });
-    case actionTypes.START_CRAWL:
-      return Object.assign({}, state, {
-        url: state.url,
-      });
     case actionTypes.ADD_DOCUMENT:
       return Object.assign({}, state, {
         documents: state.documents.concat(action.payload),
@@ -32,6 +22,10 @@ export const reducer = (state = exampleInitialState, action) => {
     case actionTypes.ADD_CRAWL:
       return Object.assign({}, state, {
         crawls: state.crawls.concat(action.crawl),
+      });
+    case actionTypes.INITIALIZE_CRAWLS:
+      return Object.assign({}, state, {
+        crawls: action.payload,
       });
     default: return state;
   }
