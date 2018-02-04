@@ -23,7 +23,7 @@ export const reducer = (state = exampleInitialState, action) => {
       });
     case actionTypes.ADD_DOCUMENT:
       return Object.assign({}, state, {
-        documents: state.documents.concat({ url: action.url }),
+        documents: state.documents.concat(action.payload),
       });
     case actionTypes.CLEAN_DOCUMENTS:
       return Object.assign({}, state, {

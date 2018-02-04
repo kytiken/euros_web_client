@@ -20,8 +20,8 @@ export const addCount = () => dispatch =>
 export const startCrawl = () => dispatch =>
   dispatch({ type: actionTypes.START_CRAWL, url: 'https://euros-test.blogspot.jp' });
 
-export const addDocument = url => dispatch =>
-  dispatch({ type: actionTypes.ADD_DOCUMENT, url });
+export const addDocument = doc => dispatch =>
+  dispatch({ type: actionTypes.ADD_DOCUMENT, payload: doc });
 
 export const cleanDocuments = () => dispatch =>
   dispatch({ type: actionTypes.CLEAN_DOCUMENTS });

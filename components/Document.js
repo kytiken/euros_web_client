@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Document = ({
-  url,
+  doc
 }) =>
-  (<li>{url}</li>);
+  (<li>{doc.body}</li>);
 
 
 Document.propTypes = {
-  url: PropTypes.string.isRequired,
+  doc: PropTypes.object.isRequired,
 };
 
 export default Document;
