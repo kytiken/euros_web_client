@@ -1,12 +1,11 @@
 import React from 'react';
-import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import withRedux from 'next-redux-wrapper';
 import initStore from '../store';
 import Crawl from '../components/Crawl';
 import CrawlForm from '../components/CrawlForm';
-import { addCrawl } from '../actions';
+import { addCrawl, initializeCrawls } from '../actions';
 import config from '../config';
 
 class Counter extends React.Component {
@@ -15,9 +14,7 @@ class Counter extends React.Component {
   }
 
   componentDidMount() {
-    fetch(config.crawl_url)
-      .then(response => response.json())
-      .then(response => response.data.forEach(crawl => this.props.addCrawl(crawl)));
+    this.props.initializeCrawls();
   }
 
   render() {
@@ -27,9 +24,6 @@ class Counter extends React.Component {
         <ol>
           { this.props.crawls.map(crawl => <Crawl key={crawl.id} crawl={crawl} />) }
         </ol>
-        <Link href="/desk">
-          <span>GoToDesk</span>
-        </Link>
       </div>
     );
   }
@@ -37,14 +31,22 @@ class Counter extends React.Component {
 
 Counter.propTypes = {
   crawls: PropTypes.arrayOf(PropTypes.object).isRequired,
+  initializeCrawls: PropTypes.func.isRequired,
+  addCrawl: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
   ({ crawls: state.crawls });
 
+const initializeCrawlsActionCreator = () => dispatch =>
+  (fetch(config.crawl_url)
+    .then(response => response.json())
+    .then(response => dispatch(initializeCrawls(response.data))));
+
 const mapDispatchToProps = dispatch =>
   ({
     addCrawl: bindActionCreators(addCrawl, dispatch),
+    initializeCrawls: bindActionCreators(initializeCrawlsActionCreator, dispatch),
   });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Counter);
