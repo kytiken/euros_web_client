@@ -21,10 +21,6 @@ class Desk extends React.Component {
       ));
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-
   render() {
     return (
       <div>
@@ -46,7 +42,6 @@ class Desk extends React.Component {
         <ol>
           { this.props.documents.map(doc => <Document key={doc.id} doc={doc} />) }
         </ol>
-
       </div>
     );
   }
