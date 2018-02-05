@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import config from '../config';
+import CrawlRecord from '../models/CrawlRecord';
 
 class CrawlForm extends React.Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class CrawlForm extends React.Component {
         <div>
           <label htmlFor="patternInput">
             pattern:
-            <input ref={(input) => { this.patternInput = input; }} id="patternInput" type="text"  />
+            <input ref={(input) => { this.patternInput = input; }} id="patternInput" type="text" />
           </label>
         </div>
         <div>
@@ -53,14 +54,14 @@ class CrawlForm extends React.Component {
           </label>
         </div>
         <button onClick={() => {
-          const crawl = {
+          const crawl = new CrawlRecord({
             url: this.urlInput.value,
             depth_limit: this.depthLimitInput.value,
             timeout: this.timeoutInput.value,
             recv_timeout: this.recvTimeoutInput.value,
             pattern: this.patternInput.value,
             cookie: this.cookieInput.value,
-          };
+          });
           fetch(config.crawl_url, {
             method: 'POST',
             body: JSON.stringify({ crawl }),
@@ -70,7 +71,7 @@ class CrawlForm extends React.Component {
             }),
           })
           .then(res => res.json())
-          .then(response => this.props.addCrawl(response.data))
+          .then(response => this.props.addCrawl(new CrawlRecord(response.data)))
           .catch(error => console.error('Error:', error));
         }}>
         submit

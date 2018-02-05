@@ -1,14 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Document from './Document';
 import config from '../config';
+import DocumentRecord from '../models/DocumentRecord';
 
 class Desk extends React.Component {
-  static getInitialProps({ isServer }) {
-    return { isServer };
-  }
-
   componentDidMount() {
     /* eslint-disable */
     this.props.channel.on('select', msg => {
@@ -18,7 +16,9 @@ class Desk extends React.Component {
     console.log(this.props.url.query.crawlId);
     fetch(config.crawl_url + '/' + this.props.url.query.crawlId.toString() + '/documents')
       .then(response => response.json())
-      .then(response => response.data.forEach(doc => this.props.addDocument(doc)));
+      .then(response => response.data.forEach(doc =>
+        this.props.addDocument(new DocumentRecord(doc))
+      ));
   }
 
   componentWillUnmount() {
@@ -54,7 +54,7 @@ class Desk extends React.Component {
 
 Desk.propTypes = {
   addDocument: PropTypes.func.isRequired,
-  documents: PropTypes.arrayOf(PropTypes.object).isRequired,
+  documents: PropTypes.arrayOf(ImmutablePropTypes.record).isRequired,
   cleanDocuments: PropTypes.func.isRequired,
 };
 
