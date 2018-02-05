@@ -7,14 +7,17 @@
     "start": "next start"
   },
   "dependencies": {
+    "immutable": "^3.8.2",
     "next": "^4.2.3",
     "next-redux-wrapper": "^1.0.0",
     "phoenix": "^1.3.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-immutable-proptypes": "^2.1.0",
     "react-redux": "^5.0.1",
     "redux": "^3.6.0",
+    "redux-actions": "^2.2.1",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.1.0"
   },

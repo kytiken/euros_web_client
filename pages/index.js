@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { bindActionCreators } from 'redux';
 import withRedux from 'next-redux-wrapper';
+import config from '../config';
 import initStore from '../store';
 import Crawl from '../components/Crawl';
 import CrawlForm from '../components/CrawlForm';
+import CrawlRecord from '../models/CrawlRecord';
 import { addCrawl, initializeCrawls } from '../actions';
-import config from '../config';
 
-class Counter extends React.Component {
-  static getInitialProps({ isServer }) {
-    return { isServer };
-  }
-
+class Crawls extends React.Component {
   componentDidMount() {
     this.props.initializeCrawls();
   }
@@ -29,8 +27,8 @@ class Counter extends React.Component {
   }
 }
 
-Counter.propTypes = {
-  crawls: PropTypes.arrayOf(PropTypes.object).isRequired,
+Crawls.propTypes = {
+  crawls: PropTypes.arrayOf(ImmutablePropTypes.record).isRequired,
   initializeCrawls: PropTypes.func.isRequired,
   addCrawl: PropTypes.func.isRequired,
 };
@@ -41,7 +39,10 @@ const mapStateToProps = state =>
 const initializeCrawlsActionCreator = () => dispatch =>
   (fetch(config.crawl_url)
     .then(response => response.json())
-    .then(response => dispatch(initializeCrawls(response.data))));
+    .then(response =>
+      dispatch(initializeCrawls(response.data
+        .map(data => new CrawlRecord(data)))))
+  );
 
 const mapDispatchToProps = dispatch =>
   ({
@@ -49,4 +50,4 @@ const mapDispatchToProps = dispatch =>
     initializeCrawls: bindActionCreators(initializeCrawlsActionCreator, dispatch),
   });
 
-export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Counter);
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Crawls);
