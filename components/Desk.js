@@ -9,14 +9,16 @@ import DocumentRecord from '../models/DocumentRecord';
 class Desk extends React.Component {
   componentDidMount() {
     /* eslint-disable */
-    this.props.channel.on('select', msg => {
+    this.props.channel.on('select', doc => {
     /* eslint-disable */
-      this.props.addDocument(msg)
+      if(doc.body !== '') {
+        this.props.addDocument(new DocumentRecord(doc))
+      }
     });
     console.log(this.props.url.query.crawlId);
     fetch(config.crawl_url + '/' + this.props.url.query.crawlId.toString() + '/documents')
       .then(response => response.json())
-      .then(response => response.data.forEach(doc =>
+      .then(response => response.data.filter(doc => doc.body !== '').forEach(doc =>
         this.props.addDocument(new DocumentRecord(doc))
       ));
   }
@@ -24,8 +26,7 @@ class Desk extends React.Component {
   render() {
     return (
       <div>
-        <input ref="queryInput" type="text" />
-        <button onClick={() => {
+        <input ref="queryInput" type="text" onChange={() => {
           this.props.cleanDocuments();
           /* eslint-disable */
           this.props.channel
@@ -34,8 +35,7 @@ class Desk extends React.Component {
             .receive('error', (reasons) => console.log('create failed', reasons) )
             .receive('timeout', () => console.log('Networking issue...') )
           /* eslint-disable */
-        }}>select</button>
-        <button onClick={this.props.cleanDocuments}>clean</button>
+        }} />
         <Link href="/">
           <span>GoToTop</span>
         </Link>
