@@ -1,0 +1,5 @@
+FROM node
+ENV APP_ROOT /app
+WORKDIR $APP_ROOT
+COPY . $APP_ROOT
+RUN yarn install
