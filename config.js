@@ -1,4 +1,4 @@
 export default {
-  socket_url: 'ws://localhost:32774/socket',
-  crawl_url: 'http://localhost:32774/crawls',
+  socket_url: 'ws://localhost:4000/socket',
+  crawl_url: 'http://localhost:4000/crawls',
 };
