@@ -56,15 +56,24 @@ class CrawlForm extends React.Component {
         <button onClick={() => {
           const crawl = new CrawlRecord({
             url: this.urlInput.value,
-            depth_limit: this.depthLimitInput.value,
+            depthLimit: this.depthLimitInput.value,
             timeout: this.timeoutInput.value,
-            recv_timeout: this.recvTimeoutInput.value,
+            recvTimeout: this.recvTimeoutInput.value,
             pattern: this.patternInput.value,
             cookie: this.cookieInput.value,
           });
           fetch(config.crawl_url, {
             method: 'POST',
-            body: JSON.stringify({ crawl }),
+            body: JSON.stringify({
+              crawl: {
+                url: crawl.url,
+                depth_limit: crawl.depthLimit,
+                timeout: crawl.timeout,
+                recv_timeout: crawl.recvTimeout,
+                pattern: crawl.pattern,
+                cookie: crawl.cookie,
+              },
+            }),
             headers: new Headers({
               'Content-Type': 'application/json',
               Accept: 'application/json',
