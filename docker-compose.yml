@@ -7,6 +7,6 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .:/app
+      - .:/app:cached
     working_dir: /app
     command: yarn run dev
