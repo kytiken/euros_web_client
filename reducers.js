@@ -18,7 +18,7 @@ export const reducer = (state = exampleInitialState, action) => {
       });
     case actionTypes.ADD_CRAWL:
       return Object.assign({}, state, {
-        crawls: state.crawls.concat(action.crawl),
+        crawls: state.crawls.unshift(action.crawl),
       });
     case actionTypes.INITIALIZE_CRAWLS:
       return Object.assign({}, state, {
