@@ -13,7 +13,7 @@ export const cleanDocuments = () =>
   ({ type: actionTypes.CLEAN_DOCUMENTS });
 
 export const addCrawl = crawl =>
-  ({ type: actionTypes.ADD_CRAWL, crawl });
+  ({ type: actionTypes.ADD_CRAWL, payload: crawl });
 
 export const initializeCrawls = crawls =>
   ({ type: actionTypes.INITIALIZE_CRAWLS, payload: crawls });

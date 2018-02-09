@@ -1,7 +1,13 @@
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { List } from 'immutable';
 import thunkMiddleware from 'redux-thunk';
-import { reducer, exampleInitialState } from './reducers';
+import reducer from './reducers';
 
-export default (initialState = exampleInitialState) =>
+const initialStateValue = {
+  documents: List(),
+  crawls: List(),
+};
+
+export default (initialState = initialStateValue) =>
   createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)));
