@@ -1,28 +1,24 @@
+import { List } from 'immutable';
 import { actionTypes } from './actions';
 
-export const exampleInitialState = {
-  documents: [],
-  crawls: [],
-};
-
 // REDUCERS
-export const reducer = (state = exampleInitialState, action) => {
+export default (state, action) => {
   switch (action.type) {
     case actionTypes.ADD_DOCUMENT:
       return Object.assign({}, state, {
-        documents: state.documents.concat(action.payload),
+        documents: state.documents.push(action.payload),
       });
     case actionTypes.CLEAN_DOCUMENTS:
       return Object.assign({}, state, {
-        documents: [],
+        documents: List(),
       });
     case actionTypes.ADD_CRAWL:
       return Object.assign({}, state, {
-        crawls: state.crawls.unshift(action.crawl),
+        crawls: state.crawls.push(action.payload),
       });
     case actionTypes.INITIALIZE_CRAWLS:
       return Object.assign({}, state, {
-        crawls: action.payload,
+        crawls: state.crawls.concat(action.payload),
       });
     default: return state;
   }

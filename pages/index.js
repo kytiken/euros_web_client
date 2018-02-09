@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import withRedux from 'next-redux-wrapper';
 import config from '../config';
@@ -28,20 +29,20 @@ class Crawls extends React.Component {
 }
 
 Crawls.propTypes = {
-  crawls: PropTypes.arrayOf(ImmutablePropTypes.record).isRequired,
+  crawls: ImmutablePropTypes.listOf(ImmutablePropTypes.record).isRequired,
   initializeCrawls: PropTypes.func.isRequired,
   addCrawl: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
-  ({ crawls: state.crawls });
+  ({ crawls: List(state.crawls) });
 
 const initializeCrawlsActionCreator = () => dispatch =>
   (fetch(config.crawl_url)
     .then(response => response.json())
     .then(response =>
       dispatch(initializeCrawls(response.data
-        .map(data => new CrawlRecord(data)))))
+        .map(crawlValues => new CrawlRecord(crawlValues)))))
   );
 
 const mapDispatchToProps = dispatch =>
