@@ -4,7 +4,8 @@
     "plugin:flowtype/recommended"
   ],
   "plugins": [
-    "flowtype"
+    "flowtype",
+    "jest"
   ],
   "rules": {
     "react/jsx-filename-extension": "off",
@@ -12,6 +13,7 @@
   },
   "env": {
     "browser": true,
+    "jest/globals": true,
   },
   "globals": {
     "browser": true,
