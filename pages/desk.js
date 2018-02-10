@@ -7,7 +7,9 @@ import { addDocument, cleanDocuments } from '../actions';
 import config from '../config';
 
 const mapStateToProps = state =>
-  ({ documents: state.documents });
+  ({
+    documents: List(state.documents),
+  });
 
 const mapDispatchToProps = (dispatch) => {
   let channel = {};

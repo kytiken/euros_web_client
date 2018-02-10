@@ -1,25 +1,28 @@
 import { List } from 'immutable';
-import { actionTypes } from './actions';
+import { handleActions } from 'redux-actions';
+import {
+  initializeCrawls,
+  addCrawl,
+  cleanDocuments,
+  addDocument,
+} from './actions';
 
-// REDUCERS
-export default (state, action) => {
-  switch (action.type) {
-    case actionTypes.ADD_DOCUMENT:
-      return Object.assign({}, state, {
-        documents: state.documents.push(action.payload),
-      });
-    case actionTypes.CLEAN_DOCUMENTS:
-      return Object.assign({}, state, {
-        documents: List(),
-      });
-    case actionTypes.ADD_CRAWL:
-      return Object.assign({}, state, {
-        crawls: state.crawls.push(action.payload),
-      });
-    case actionTypes.INITIALIZE_CRAWLS:
-      return Object.assign({}, state, {
-        crawls: state.crawls.concat(action.payload),
-      });
-    default: return state;
-  }
+export const defaultState = {
+  documents: List(),
+  crawls: List(),
 };
+
+export const reducer = handleActions({
+  [initializeCrawls](state, { payload: { crawls } }) {
+    return { ...state, crawls: List(crawls) };
+  },
+  [addCrawl](state, { payload: { crawl } }) {
+    return { ...state, crawls: List(state.crawls).push(crawl) };
+  },
+  [cleanDocuments](state) {
+    return { ...state, documents: List() };
+  },
+  [addDocument](state, { payload }) {
+    return { ...state, documents: List(state.documents).push(payload.document) };
+  },
+}, defaultState);
