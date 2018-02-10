@@ -21,7 +21,7 @@ class Crawls extends React.Component {
       <div>
         <CrawlForm addCrawl={this.props.addCrawl} />
         <ol>
-          { this.props.crawls.map(crawl => <Crawl key={crawl.id} crawl={crawl} />) }
+          { this.props.crawls.map(crawl => <Crawl key={crawl.id} crawl={crawl} />).toJS() }
         </ol>
       </div>
     );
