@@ -5,11 +5,14 @@ import {
   addCrawl,
   cleanDocuments,
   addDocument,
+  addDeskErrors,
+  cleanDeskErrors,
 } from './actions';
 
 export const defaultState = {
   documents: List(),
   crawls: List(),
+  deskErrors: List(),
 };
 
 export const reducer = handleActions({
@@ -24,5 +27,11 @@ export const reducer = handleActions({
   },
   [addDocument](state, { payload }) {
     return { ...state, documents: List(state.documents).push(payload.document) };
+  },
+  [addDeskErrors](state, { payload: { error } }) {
+    return { ...state, deskErrors: List(state.desk_errors).push(error) };
+  },
+  [cleanDeskErrors](state) {
+    return { ...state, deskErrors: List() };
   },
 }, defaultState);
