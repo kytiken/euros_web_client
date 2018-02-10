@@ -3,42 +3,51 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Document from './Document';
-import config from '../config';
 import DocumentRecord from '../models/DocumentRecord';
+import DeskErrorsMessageBox from './DeskErrorsMessageBox';
 
 class Desk extends React.Component {
   componentDidMount() {
     /* eslint-disable */
-    this.props.channel.on('select', msg => {
+    this.props.channel.on('select', data => {
     /* eslint-disable */
-      this.props.addDocument(msg)
+      this.props.addDocument(new DocumentRecord(data))
     });
-    console.log(this.props.url.query.crawlId);
-    fetch(config.crawl_url + '/' + this.props.url.query.crawlId.toString() + '/documents')
-      .then(response => response.json())
-      .then(response => response.data.forEach(doc =>
-        this.props.addDocument(new DocumentRecord(doc))
-      ));
+  }
+
+  handleSelect() {
+    this.props.cleanDocuments();
+    /* eslint-disable */
+    this.props.channel
+      .push("select", { crawl_id: this.props.url.query.crawlId, query: this.refs.queryInput.value }, 60000)
+      .receive('ok', (msg) => console.log('created message', msg) )
+    /* eslint-disable */
+      .receive('error', (reasons) => this.props.addErrors('create failed', reasons))
+      .receive('timeout', () => this.props.addErrors('Networking issue...'))
+  }
+
+  handleAddError() {
+    this.props.addErrors((new Error('raised error')).message);
+  }
+
+  deskErrorsMessageBox() {
+    if(this.props.errors.size > 0) {
+      return <DeskErrorsMessageBox messages={ this.props.errors } cleanErrors={ this.props.cleanErrors } />;
+    } 
+    return <div />;
   }
 
   render() {
     return (
       <div>
         <input ref="queryInput" type="text" />
-        <button onClick={() => {
-          this.props.cleanDocuments();
-          /* eslint-disable */
-          this.props.channel
-            .push("select", { crawl_id: this.props.url.query.crawlId, query: this.refs.queryInput.value }, 60000)
-            .receive('ok', (msg) => console.log('created message', msg) )
-            .receive('error', (reasons) => console.log('create failed', reasons) )
-            .receive('timeout', () => console.log('Networking issue...') )
-          /* eslint-disable */
-        }}>select</button>
+        <button onClick={this.handleSelect.bind(this)}>select</button>
         <button onClick={this.props.cleanDocuments}>clean</button>
+        <button onClick={this.handleAddError.bind(this)}>raise error</button>
         <Link href="/">
           <span>GoToTop</span>
         </Link>
+        { this.deskErrorsMessageBox() }
         <ol>
           { this.props.documents.map(doc => <Document key={doc.id} doc={doc} />) }
         </ol>
@@ -49,8 +58,10 @@ class Desk extends React.Component {
 
 Desk.propTypes = {
   addDocument: PropTypes.func.isRequired,
-  documents: PropTypes.arrayOf(ImmutablePropTypes.record).isRequired,
+  documents: ImmutablePropTypes.listOf(ImmutablePropTypes.record).isRequired,
+  errors: ImmutablePropTypes.listOf(PropTypes.string).isRequired,
   cleanDocuments: PropTypes.func.isRequired,
+  cleanErrors: PropTypes.func.isRequired,
 };
 
 export default Desk;
