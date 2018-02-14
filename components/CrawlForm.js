@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import config from '../config';
 import CrawlRecord from '../models/CrawlRecord';
 import CrawlError from '../models/CrawlError';
-import CrawlFormError from './CrawlFormError';
 
 class CrawlForm extends React.Component {
   constructor(props) {
@@ -72,41 +70,7 @@ class CrawlForm extends React.Component {
               pattern: this.patternInput.value,
               cookie: this.cookieInput.value,
             });
-            fetch(config.crawl_url, {
-              method: 'POST',
-              body: JSON.stringify({
-                crawl: {
-                  url: crawl.url,
-                  depth_limit: crawl.depthLimit,
-                  timeout: crawl.timeout,
-                  recv_timeout: crawl.recvTimeout,
-                  pattern: crawl.pattern,
-                  cookie: crawl.cookie,
-                },
-              }),
-              headers: new Headers({
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-              }),
-            })
-            .then((response) => {
-              response.json().then((json) => {
-                if (response.ok) {
-                  this.props.addCrawl(new CrawlRecord(json.data));
-                } else {
-                  const crawlError = new CrawlError({
-                    url: json.errors.url,
-                    depthLimit: json.errors.depth_limit,
-                    timeout: json.errors.timeout,
-                    recvTimeout: json.errors.recv_timeout,
-                    pattern: json.errors.pattern,
-                    cookie: json.errors.cookie,
-                  });
-                  this.props.raiseCrawlFormErrors(crawlError);
-                }
-              });
-            })
-            .catch(error => this.props.addCrawl(error));
+            this.props.createCrawl(crawl);
           }}
           >
           submit
@@ -118,8 +82,7 @@ class CrawlForm extends React.Component {
 }
 
 CrawlForm.propTypes = {
-  addCrawl: PropTypes.func.isRequired,
-  raiseCrawlFormErrors: PropTypes.func.isRequired,
+  createCrawl: PropTypes.func.isRequired,
   errors: ImmutablePropTypes.recordOf(CrawlError).isRequired,
 };
 

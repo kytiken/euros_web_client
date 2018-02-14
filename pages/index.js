@@ -1,13 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import withRedux from 'next-redux-wrapper';
 import config from '../config';
 import initStore from '../store';
-import Crawl from '../components/Crawl';
-import CrawlForm from '../components/CrawlForm';
+import CrawlIndex from '../components/CrawlIndex';
 import CrawlRecord from '../models/CrawlRecord';
 import CrawlError from '../models/CrawlError';
 import {
@@ -15,35 +11,6 @@ import {
   initializeCrawls,
   raiseCrawlFormErrors,
 } from '../actions';
-
-class Crawls extends React.Component {
-  componentDidMount() {
-    this.props.initializeCrawls();
-  }
-
-  render() {
-    return (
-      <div>
-        <CrawlForm
-          addCrawl={this.props.addCrawl}
-          raiseCrawlFormErrors={this.props.raiseCrawlFormErrors}
-          errors={this.props.crawlFormErrors}
-        />
-        <ol>
-          { this.props.crawls.map(crawl => <Crawl key={crawl.id} crawl={crawl} />).toJS() }
-        </ol>
-      </div>
-    );
-  }
-}
-
-Crawls.propTypes = {
-  crawls: ImmutablePropTypes.listOf(ImmutablePropTypes.record).isRequired,
-  crawlFormErrors: ImmutablePropTypes.recordOf(CrawlError).isRequired,
-  initializeCrawls: PropTypes.func.isRequired,
-  addCrawl: PropTypes.func.isRequired,
-  raiseCrawlFormErrors: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = state =>
   ({
@@ -59,11 +26,50 @@ const initializeCrawlsActionCreator = () => dispatch =>
         .map(crawlValues => new CrawlRecord(crawlValues)))))
   );
 
+const createCrawl = crawl => dispatch =>
+  (
+    fetch(config.crawl_url, {
+      method: 'POST',
+      body: JSON.stringify({
+        crawl: {
+          url: crawl.url,
+          depth_limit: crawl.depthLimit,
+          timeout: crawl.timeout,
+          recv_timeout: crawl.recvTimeout,
+          pattern: crawl.pattern,
+          cookie: crawl.cookie,
+        },
+      }),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }),
+    })
+      .then((response) => {
+        response.json().then((json) => {
+          if (response.ok) {
+            dispatch(addCrawl(new CrawlRecord(json.data)));
+          } else {
+            const crawlError = new CrawlError({
+              url: json.errors.url,
+              depthLimit: json.errors.depth_limit,
+              timeout: json.errors.timeout,
+              recvTimeout: json.errors.recv_timeout,
+              pattern: json.errors.pattern,
+              cookie: json.errors.cookie,
+            });
+            dispatch(raiseCrawlFormErrors(crawlError));
+          }
+        });
+      })
+      .catch(error => dispatch(addCrawl(error)))
+  );
+
+
 const mapDispatchToProps = dispatch =>
   ({
-    addCrawl: bindActionCreators(addCrawl, dispatch),
-    raiseCrawlFormErrors: bindActionCreators(raiseCrawlFormErrors, dispatch),
     initializeCrawls: bindActionCreators(initializeCrawlsActionCreator, dispatch),
+    createCrawl: bindActionCreators(createCrawl, dispatch),
   });
 
-export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Crawls);
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(CrawlIndex);
