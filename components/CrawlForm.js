@@ -15,6 +15,18 @@ class CrawlForm extends React.Component {
     this.cookieInput = null;
   }
 
+  handleSubmit() {
+    const crawl = new CrawlRecord({
+      url: this.urlInput.value,
+      depthLimit: this.depthLimitInput.value,
+      timeout: this.timeoutInput.value,
+      recvTimeout: this.recvTimeoutInput.value,
+      pattern: this.patternInput.value,
+      cookie: this.cookieInput.value,
+    });
+    this.props.createCrawl(crawl);
+  }
+
   render() {
     return (
       <div>
@@ -61,19 +73,8 @@ class CrawlForm extends React.Component {
             </label>
             <span>{this.props.errors.cookie}</span>
           </div>
-          <button onClick={() => {
-            const crawl = new CrawlRecord({
-              url: this.urlInput.value,
-              depthLimit: this.depthLimitInput.value,
-              timeout: this.timeoutInput.value,
-              recvTimeout: this.recvTimeoutInput.value,
-              pattern: this.patternInput.value,
-              cookie: this.cookieInput.value,
-            });
-            this.props.createCrawl(crawl);
-          }}
-          >
-          submit
+          <button onClick={() => this.handleSubmit()}>
+            submit
           </button>
         </div>
       </div>
