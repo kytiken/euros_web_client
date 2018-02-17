@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<li>
+  <a
+    href="/desk?crawlId=1"
+    onClick={[Function]}
+  >
+    http://google.com
+  </a>
+</li>
+`;

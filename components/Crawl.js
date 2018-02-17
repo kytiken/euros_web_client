@@ -20,4 +20,4 @@ Crawl.propTypes = {
   crawl: ImmutablePropTypes.recordOf({ url: PropTypes.string }).isRequired,
 };
 
-export default connect(state => state)(Crawl);
+export default Crawl;
