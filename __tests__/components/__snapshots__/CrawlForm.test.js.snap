@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div>
+    <div>
+      <label
+        htmlFor="urlInput"
+      >
+        url:
+        <input
+          id="urlInput"
+          type="text"
+        />
+      </label>
+      <span />
+    </div>
+    <div>
+      <label
+        htmlFor="depthLimitInput"
+      >
+        depth_limit:
+        <input
+          id="depthLimitInput"
+          type="text"
+        />
+      </label>
+      <span />
+    </div>
+    <div>
+      <label
+        htmlFor="timeoutInput"
+      >
+        timeout:
+        <input
+          id="timeoutInput"
+          type="text"
+        />
+      </label>
+      <span />
+    </div>
+    <div>
+      <label
+        htmlFor="recvTimeoutInput"
+      >
+        recv_timeout:
+        <input
+          id="recvTimeoutInput"
+          type="text"
+        />
+      </label>
+      <span />
+    </div>
+    <div>
+      <label
+        htmlFor="patternInput"
+      >
+        pattern:
+        <input
+          id="patternInput"
+          type="text"
+        />
+      </label>
+      <span />
+    </div>
+    <div>
+      <label
+        htmlFor="cookieInput"
+      >
+        cookie:
+        <input
+          id="cookieInput"
+          type="text"
+        />
+      </label>
+      <span />
+    </div>
+    <button
+      onClick={[Function]}
+    >
+      submit
+    </button>
+  </div>
+</div>
+`;
